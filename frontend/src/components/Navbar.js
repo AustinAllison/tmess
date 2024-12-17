@@ -12,7 +12,7 @@ const Navbar = () => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="logo">
           <Link to="/" className="text-xl font-bold">
-            MyApp
+            TMess
           </Link>
         </div>
         <div className="links">
