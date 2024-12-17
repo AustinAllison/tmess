@@ -17,21 +17,20 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!email || !password) {
-      // Handle validation
-      return;
-    }
-
+  
     try {
-      // Dispatch the loginUser thunk
       await dispatch(loginUser({ email, password })).unwrap();
-      navigate('/dashboard'); // Redirect upon successful login
+      console.log('Login successful!');
+      navigate('/dashboard'); // Redirect upon success
     } catch (err) {
-      // Handle error (optional, since authError is already in state)
-      console.error('Failed to login:', err);
+      console.error('Login failed:', err);
     }
   };
+  
+  // Debug Redux state
+  console.log('Auth Status:', authStatus);
+  console.log('Auth Error:', authError);
+  console.log('User:', user);
 
   if (user) {
     return <Navigate to="/dashboard" replace />;

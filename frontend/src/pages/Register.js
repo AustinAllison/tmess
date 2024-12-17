@@ -1,23 +1,16 @@
-// src/pages/Register.js
+// src/pages/Register.jsx
 
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { registerUser } from '../redux/slices/authSlice';
+import { registerUser } from '../redux/slices/authSlice'; // Ensure correct path
 import { useNavigate, Navigate } from 'react-router-dom';
-import {
-  Input,
-  Button,
-  Form,
-  FormField,
-  FormLabel,
-  FormMessage,
-} from '../components/shadcn'; // Ensure this path is correct
+import { Input, Button, Form, FormField, FormLabel, FormMessage } from '../components/shadcn'; // Ensure all components are imported
 
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, user } = useSelector((state) => state.auth);
-
+  const { user, loading, error } = useSelector((state) => state.auth);
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -33,10 +26,13 @@ const Register = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    dispatch(registerUser(formData))
-      .unwrap()
-      .then(() => navigate('/dashboard'))
-      .catch(() => {});
+    try {
+      await dispatch(registerUser(formData)).unwrap();
+      navigate('/dashboard');
+    } catch (err) {
+      console.error('Registration failed:', err);
+      // Optionally, handle the error (e.g., display a message)
+    }
   };
 
   // Redirect to dashboard if already logged in
@@ -47,10 +43,10 @@ const Register = () => {
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white border rounded-md shadow-md">
       <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
-      
+
       {/* Display Redux Errors */}
       {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
-      
+
       <Form onSubmit={onSubmit}>
         {/* Name Field */}
         <FormField>

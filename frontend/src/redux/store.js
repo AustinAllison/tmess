@@ -1,13 +1,16 @@
-// src/redux/store.js
-
 import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './slices/authSlice'; // Adjust path if necessary
+import authReducer, { setUser } from './slices/authSlice';
 
 const store = configureStore({
   reducer: {
     auth: authReducer,
-    // Add other reducers here
   },
 });
+
+// Rehydrate user from localStorage
+const user = JSON.parse(localStorage.getItem('user'));
+if (user) {
+  store.dispatch(setUser(user));
+}
 
 export default store;
