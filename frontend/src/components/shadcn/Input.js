@@ -1,13 +1,9 @@
-// src/components/shadcn/Input.tsx
+// src/components/shadcn/Input.js
 
 import React from 'react';
 import clsx from 'clsx';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  className?: string;
-}
-
-export const Input: React.FC<InputProps> = ({ className, ...props }) => {
+const Input = ({ className, ...props }) => {
   return (
     <input
       className={clsx(
@@ -18,3 +14,5 @@ export const Input: React.FC<InputProps> = ({ className, ...props }) => {
     />
   );
 };
+
+export { Input };

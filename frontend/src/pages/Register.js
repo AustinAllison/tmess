@@ -1,12 +1,22 @@
+// src/pages/Register.js
+
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../redux/slices/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
+import {
+  Input,
+  Button,
+  Form,
+  FormField,
+  FormLabel,
+  FormMessage,
+} from '../components/shadcn'; // Ensure this path is correct
 
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector(state => state.auth);
+  const { loading, error, user } = useSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -18,47 +28,116 @@ const Register = () => {
 
   const { name, email, password, role, licenseNumber } = formData;
 
-  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    dispatch(registerUser(formData)).unwrap()
+    dispatch(registerUser(formData))
+      .unwrap()
       .then(() => navigate('/dashboard'))
       .catch(() => {});
   };
 
+  // Redirect to dashboard if already logged in
+  if (user) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return (
-    <div className="max-w-md mx-auto mt-10">
-      <h2 className="text-2xl font-bold mb-4">Register</h2>
-      {error && <p className="text-red-500">{error}</p>}
-      <form onSubmit={onSubmit}>
-        <div className="mb-4">
-          <label className="block">Name</label>
-          <input type="text" name="name" value={name} onChange={onChange} required className="w-full p-2 border" />
-        </div>
-        <div className="mb-4">
-          <label className="block">Email</label>
-          <input type="email" name="email" value={email} onChange={onChange} required className="w-full p-2 border" />
-        </div>
-        <div className="mb-4">
-          <label className="block">Password</label>
-          <input type="password" name="password" value={password} onChange={onChange} required className="w-full p-2 border" />
-        </div>
-        <div className="mb-4">
-          <label className="block">Role</label>
-          <select name="role" value={role} onChange={onChange} required className="w-full p-2 border">
+    <div className="max-w-md mx-auto mt-10 p-6 bg-white border rounded-md shadow-md">
+      <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
+      
+      {/* Display Redux Errors */}
+      {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+      
+      <Form onSubmit={onSubmit}>
+        {/* Name Field */}
+        <FormField>
+          <FormLabel htmlFor="name">Name</FormLabel>
+          <Input
+            type="text"
+            id="name"
+            name="name"
+            value={name}
+            onChange={onChange}
+            required
+            placeholder="Enter your name"
+          />
+          <FormMessage />
+        </FormField>
+
+        {/* Email Field */}
+        <FormField>
+          <FormLabel htmlFor="email">Email</FormLabel>
+          <Input
+            type="email"
+            id="email"
+            name="email"
+            value={email}
+            onChange={onChange}
+            required
+            placeholder="Enter your email"
+          />
+          <FormMessage />
+        </FormField>
+
+        {/* Password Field */}
+        <FormField>
+          <FormLabel htmlFor="password">Password</FormLabel>
+          <Input
+            type="password"
+            id="password"
+            name="password"
+            value={password}
+            onChange={onChange}
+            required
+            placeholder="Enter your password"
+          />
+          <FormMessage />
+        </FormField>
+
+        {/* Role Field */}
+        <FormField>
+          <FormLabel htmlFor="role">Role</FormLabel>
+          <select
+            id="role"
+            name="role"
+            value={role}
+            onChange={onChange}
+            required
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
             <option value="poster">Poster</option>
             <option value="claimer">Claimer</option>
           </select>
-        </div>
-        <div className="mb-4">
-          <label className="block">License Number</label>
-          <input type="text" name="licenseNumber" value={licenseNumber} onChange={onChange} required className="w-full p-2 border" />
-        </div>
-        <button type="submit" disabled={loading} className="w-full p-2 bg-blue-500 text-white">
+          <FormMessage />
+        </FormField>
+
+        {/* License Number Field */}
+        <FormField>
+          <FormLabel htmlFor="licenseNumber">License Number</FormLabel>
+          <Input
+            type="text"
+            id="licenseNumber"
+            name="licenseNumber"
+            value={licenseNumber}
+            onChange={onChange}
+            required
+            placeholder="Enter your license number"
+          />
+          <FormMessage />
+        </FormField>
+
+        {/* Submit Button */}
+        <Button
+          type="submit"
+          disabled={loading}
+          className="w-full mt-6"
+        >
           {loading ? 'Registering...' : 'Register'}
-        </button>
-      </form>
+        </Button>
+      </Form>
     </div>
   );
 };
