@@ -1,6 +1,6 @@
 # Real Estate Platform
 
-A full-stack real estate platform that enables users to register, log in, and manage appointments based on their roles (poster or claimer). This platform is built using modern web technologies.
+A full-stack real estate platform that enables users to register, log in, and manage appointments based on their roles (poster or claimer).
 
 ---
 
